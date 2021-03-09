@@ -13,6 +13,13 @@
   /* color: white; */
 }
 
+@media (min-width: 762px) {
+  .App {
+    max-width: 90%;
+    margin: auto;
+  }
+}
+
 
 
 

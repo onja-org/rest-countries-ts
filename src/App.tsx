@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import GlobalContext from './components/GlobalContext';
 import './App.css';
@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import CountryDetails from './pages/CountryDetails';
 
 function App() {
+  // const {isDarkMode} = useContext({GlobalContext);
   return (
     <GlobalContext>
       <div className="App">
@@ -16,7 +17,7 @@ function App() {
               <Route exact path="/">
                   <Home/>
                 </Route>
-                <Route path="/details">
+                <Route path="/:alpha3Code">
                   <CountryDetails/>
               </Route>
             </Switch>
