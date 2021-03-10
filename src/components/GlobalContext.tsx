@@ -9,11 +9,11 @@ type countryStateType = {
     callingCodes: [string],
     capital: string,
     cioc: string,
-    currencies: [object],
+    currencies: [{code: string, name: string, symbol: string}],
     demonym: string,
     flag: string,
     gini: number,
-    languages: [object],
+    languages: [{iso639_1: string, iso639_2: string, name: string, nativeName: string}],
     latlng: [number],
     name: string,
     nativeName: string,
@@ -28,28 +28,43 @@ type countryStateType = {
 }
 
 interface State {
-    // isDarkMode: boolean;
-    // turnOn: () => {};
-    // turnOff: () => {};
+    isDarkMode: boolean;
+    turnOn: () => void;
+    turnOff: () => void;
+    dispatch: React.Dispatch<any>;
     allCountries: countryStateType[];
+    searchContryName: countryStateType[];
 }
 export const initialValues: State = {
-    // isDarkMode: false,
+    isDarkMode: false,
     allCountries: [],
+    searchContryName: [],
+    dispatch: () => {},
+    turnOn: () => {},
+    turnOff: () => {},
 }
 // type Action = | {type: "dark-mode-on"} | {type: "dark-mode-off"} | {type: "get-all-countries", allCountries: []} ;
-type Action = | {type: "get-all-countries", allCountries: []} ;
+type Action = | {type: "dark-mode-on"} | {type: "dark-mode-off"} | {type: "get-all-countries", allCountries: countryStateType[]} | {type: "search-country-name", searchContryName: countryStateType[]} ;
     
 export const GlobalContext = createContext(initialValues);
 
 function reducer(state: State, action: Action) {
     switch (action.type) {
-        // case 'dark-mode-on':
-        //     return {isDarkMode: true}
-        // case 'dark-mode-off': 
-        //     return {isDarkMode: false}
-        case 'get-all-countries': 
-            return {allCountries: action.allCountries}
+        case 'dark-mode-on': {
+            return {...state, isDarkMode: true}
+        }
+        case 'dark-mode-off': {
+            return {...state, isDarkMode: false}
+        }
+        case 'get-all-countries': {
+            return {
+                ...state,
+                allCountries: action.allCountries}
+        }
+        case 'search-country-name': {
+            return { ...state,
+                allCountries: action.searchContryName}
+        }
         default:
             return state;
     }
@@ -75,9 +90,11 @@ export const GlobalProvider: React.FC = ({children}) => {
 
     return (
         <GlobalContext.Provider value={{
-            // turnOn: () => dispatch({type:'dark-mode-on'}),
-            // turnOff: () => dispatch({type:'dark-mode-off'}),
-            // isDarkMode: state.isDarkMode,
+            turnOn: () => dispatch({type:'dark-mode-on'}),
+            turnOff: () => dispatch({type:'dark-mode-off'}),
+            isDarkMode: state.isDarkMode,
+            dispatch,
+            searchContryName: state.searchContryName,
             allCountries: state.allCountries
         }}>
             {children}

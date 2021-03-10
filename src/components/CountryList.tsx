@@ -28,29 +28,33 @@ export default function CountryList() {
 }
 
 const List = styled.div`
-    display: flex;
-    flex-direction: column;
-    @media (min-width: 762px) {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 32px;
-
-        img {
-            max-height: 200px;
-            min-height: 100%;
-        }
-    }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 264px);
+    column-gap: 4rem;
+    margin-top: 4.8rem;
+    row-gap: 7.5rem;
+    justify-content: center;
+    
 `;
 
 const ListItemLink = styled(ReachRouterLink)`
-    border-radius: 6px;
+    border-radius: 5px;
     text-decoration: none;
+    box-shadow: 0 0 0.7rem 0.2rem rgba(0,0,0,0.03);
     color: initial;
+    max-width: 128rem;
     img {
         max-width: 100%;
         min-width: 100%;
         max-height: auto;
-        border-radius: 6px 6px 0px 0px;
+        border-radius: 5px 5px 0px 0px;
+    }
+
+    @media (min-width: 1080px) {
+        img {
+            max-height: 200px;
+            min-height: 100%;
+        }
     }
 `;
 
