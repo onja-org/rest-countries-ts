@@ -34,17 +34,24 @@ interface State {
     dispatch: React.Dispatch<any>;
     allCountries: countryStateType[];
     searchContryName: countryStateType[];
+    filterCountryRegion: countryStateType[];
 }
 export const initialValues: State = {
     isDarkMode: false,
     allCountries: [],
     searchContryName: [],
+    filterCountryRegion: [],
     dispatch: () => {},
     turnOn: () => {},
     turnOff: () => {},
 }
 // type Action = | {type: "dark-mode-on"} | {type: "dark-mode-off"} | {type: "get-all-countries", allCountries: []} ;
-type Action = | {type: "dark-mode-on"} | {type: "dark-mode-off"} | {type: "get-all-countries", allCountries: countryStateType[]} | {type: "search-country-name", searchContryName: countryStateType[]} ;
+type Action = 
+| {type: "dark-mode-on"} 
+| {type: "dark-mode-off"} 
+| {type: "get-all-countries", allCountries: countryStateType[]} 
+| {type: "search-country-name", searchContryName: countryStateType[]}
+| {type: "filter-country-region", filterCountryRegion: countryStateType[]} ;
     
 export const GlobalContext = createContext(initialValues);
 
@@ -62,8 +69,14 @@ function reducer(state: State, action: Action) {
                 allCountries: action.allCountries}
         }
         case 'search-country-name': {
-            return { ...state,
+            return { 
+                ...state,
                 allCountries: action.searchContryName}
+        }
+        case 'filter-country-region': {
+            return { 
+                ...state,
+                allCountries: action.filterCountryRegion}
         }
         default:
             return state;
@@ -95,6 +108,7 @@ export const GlobalProvider: React.FC = ({children}) => {
             isDarkMode: state.isDarkMode,
             dispatch,
             searchContryName: state.searchContryName,
+            filterCountryRegion: state.filterCountryRegion,
             allCountries: state.allCountries
         }}>
             {children}
