@@ -3,12 +3,12 @@ import { GlobalContext } from './GlobalContext';
 import styled from 'styled-components';
 import { Link as ReachRouterLink } from 'react-router-dom';
 export default function CountryList() {
-    // alpha3Code
-    const {allCountries} = useContext(GlobalContext);
-    console.log("sc",allCountries)
+    const {allCountries, searchContryName,filterCountryRegion} = useContext(GlobalContext);
+    
     return (
         <List>
-            {allCountries ? allCountries.map(country => (
+            {allCountries?.filter(country => country.name.toLocaleLowerCase().includes(searchContryName.toLocaleLowerCase()) 
+            && country.region.toLocaleLowerCase().includes(filterCountryRegion.toLocaleLowerCase())).map(country => (
                 <ListItemLink to={`/${country.alpha3Code}`} key={country.alpha2Code}>
                     <div>
                         <img src={country.flag}/>
@@ -20,7 +20,7 @@ export default function CountryList() {
                         <Strong>Capital: <span>{country.capital}</span></Strong>
                     </div>
                 </ListItemLink>
-            )): ''
+            ))
             }   
         </List>
     )

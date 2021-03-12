@@ -33,14 +33,14 @@ interface State {
     turnOff: () => void;
     dispatch: React.Dispatch<any>;
     allCountries: countryStateType[];
-    searchContryName: countryStateType[];
-    filterCountryRegion: countryStateType[];
+    searchContryName: string;
+    filterCountryRegion: string;
 }
 export const initialValues: State = {
     isDarkMode: false,
     allCountries: [],
-    searchContryName: [],
-    filterCountryRegion: [],
+    searchContryName: '',
+    filterCountryRegion: '',
     dispatch: () => {},
     turnOn: () => {},
     turnOff: () => {},
@@ -50,8 +50,8 @@ type Action =
 | {type: "dark-mode-on"} 
 | {type: "dark-mode-off"} 
 | {type: "get-all-countries", allCountries: countryStateType[]} 
-| {type: "search-country-name", searchContryName: countryStateType[]}
-| {type: "filter-country-region", filterCountryRegion: countryStateType[]} ;
+| {type: "search-country-name", searchContryName: ''}
+| {type: "filter-country-region", filterCountryRegion: ''} ;
     
 export const GlobalContext = createContext(initialValues);
 
@@ -71,12 +71,12 @@ function reducer(state: State, action: Action) {
         case 'search-country-name': {
             return { 
                 ...state,
-                allCountries: action.searchContryName}
+                searchContryName: action.searchContryName}
         }
         case 'filter-country-region': {
             return { 
                 ...state,
-                allCountries: action.filterCountryRegion}
+                filterCountryRegion: action.filterCountryRegion}
         }
         default:
             return state;
