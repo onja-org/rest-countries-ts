@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import {useContext} from 'react'
 import { GlobalContext } from './GlobalContext';
 import styled from 'styled-components';
 import { Link as ReachRouterLink } from 'react-router-dom';
@@ -10,15 +10,15 @@ export default function CountryList() {
             {allCountries?.filter(country => country.name.toLocaleLowerCase().includes(searchContryName.toLocaleLowerCase()) 
             && country.region.toLocaleLowerCase().includes(filterCountryRegion.toLocaleLowerCase())).map(country => (
                 <ListItemLink to={`/${country.alpha3Code}`} key={country.alpha2Code}>
-                    <div>
+                    <CountryFlag>
                         <img src={country.flag}/>
-                    </div>
-                    <div>
+                    </CountryFlag>
+                    <AboutCountry>
                         <h2>{country.name}</h2>
                         <Strong>Population: <span>{country.population}</span></Strong>
                         <Strong>Region: <span>{country.region}</span></Strong>
                         <Strong>Capital: <span>{country.capital}</span></Strong>
-                    </div>
+                    </AboutCountry>
                 </ListItemLink>
             ))
             }   
@@ -28,36 +28,36 @@ export default function CountryList() {
 }
 
 const List = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 264px);
+    display: flex;
+    flex-wrap: wrap;
     column-gap: 4rem;
     margin-top: 4.8rem;
     row-gap: 7.5rem;
     justify-content: center;
-    
 `;
 
 const ListItemLink = styled(ReachRouterLink)`
     border-radius: 5px;
     text-decoration: none;
-    box-shadow: 0 0 0.7rem 0.2rem rgba(0,0,0,0.03);
+    box-shadow: 0 0 0.7rem 0.2rem rgb(0 0 0 / 3%);
+    background-color: hsl(0, 0%, 100%);
     color: initial;
-    max-width: 128rem;
+    max-width: 268px;
     img {
-        max-width: 100%;
-        min-width: 100%;
-        max-height: auto;
+        width: 100%;
         border-radius: 5px 5px 0px 0px;
-    }
-
-    @media (min-width: 1080px) {
-        img {
-            max-height: 200px;
-            min-height: 100%;
-        }
+        height: 100%;
+        object-fit: cover;
     }
 `;
 
+const CountryFlag = styled.div`
+    height: 100%;
+    max-height: 160px;
+`;
+const AboutCountry = styled.div`
+    padding: 24px;
+`;
 const Strong = styled.strong`
     display: flex;
     flex-direction: row;

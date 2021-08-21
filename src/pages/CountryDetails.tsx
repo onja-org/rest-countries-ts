@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import {useParams} from 'react-router-dom';
 import {GlobalContext} from '../components/GlobalContext';
 import { Link as ReachRouterLink } from 'react-router-dom';
@@ -11,9 +11,8 @@ type ParamsType = {
 export default function CountryDetails() {
     const {allCountries} = useContext(GlobalContext);
     const {alpha3Code} = useParams<ParamsType>();
-
     const thisCountry = allCountries !== null && allCountries.find(country => country.alpha3Code === alpha3Code);
-    console.log(thisCountry)
+
     return (
         <Frame>
             <BackLink to="/">Back</BackLink>
