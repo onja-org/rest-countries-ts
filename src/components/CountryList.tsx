@@ -2,52 +2,77 @@ import {useContext} from 'react'
 import { GlobalContext } from './GlobalContext';
 import styled from 'styled-components';
 import { Link as ReachRouterLink } from 'react-router-dom';
+import {CountryName, Heading, Value} from '../globalStyles'
 export default function CountryList() {
     const {allCountries, searchContryName,filterCountryRegion} = useContext(GlobalContext);
     
     return (
+    <Section>
         <List>
             {allCountries?.filter(country => country.name.toLocaleLowerCase().includes(searchContryName.toLocaleLowerCase()) 
             && country.region.toLocaleLowerCase().includes(filterCountryRegion.toLocaleLowerCase())).map(country => (
-                <ListItemLink to={`/${country.alpha3Code}`} key={country.alpha2Code}>
+                <ItemLink to={`/${country.alpha3Code}`} key={country.alpha2Code}>
                     <CountryFlag>
                         <img src={country.flag}/>
                     </CountryFlag>
                     <AboutCountry>
-                        <h2>{country.name}</h2>
-                        <Strong>Population: <span>{country.population}</span></Strong>
-                        <Strong>Region: <span>{country.region}</span></Strong>
-                        <Strong>Capital: <span>{country.capital}</span></Strong>
+                        <CountryName>{country.name}</CountryName>
+                        <BreakDown>
+                            <Heading>Population:</Heading>
+                            <Value>{country.population}</Value>
+                        </BreakDown>
+                        <BreakDown>
+                            <Heading>Region:</Heading>
+                            <Value>{country.region}</Value>
+                        </BreakDown>
+                       <BreakDown>
+                            <Heading>Capital:</Heading>
+                            <Value>{country.capital}</Value>
+                       </BreakDown>
                     </AboutCountry>
-                </ListItemLink>
+                </ItemLink>
             ))
             }   
         </List>
+    </Section>
     )
     
 }
 
-const List = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 4rem;
-    margin-top: 4.8rem;
-    row-gap: 7.5rem;
-    justify-content: center;
+const Section = styled.section`
+    padding-bottom: 4.5rem;
 `;
 
-const ListItemLink = styled(ReachRouterLink)`
+const List = styled.ul`
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 4.8rem;
+    column-gap: 40px;
+    padding: 0;
+    row-gap: 40px;
+    justify-content: center;
+
+`;
+
+const ItemLink = styled(ReachRouterLink)`
     border-radius: 5px;
     text-decoration: none;
     box-shadow: 0 0 0.7rem 0.2rem rgb(0 0 0 / 3%);
     background-color: hsl(0, 0%, 100%);
     color: initial;
     max-width: 268px;
+    @media (max-width: 400px) {
+        height: 363px;
+    }
     img {
         width: 100%;
         border-radius: 5px 5px 0px 0px;
         height: 100%;
         object-fit: cover;
+    }
+    &:hover {
+        position: relative;
+        bottom: 1px;
     }
 `;
 
@@ -56,13 +81,14 @@ const CountryFlag = styled.div`
     max-height: 160px;
 `;
 const AboutCountry = styled.div`
-    padding: 24px;
+    margin: 24px;
+    & > h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
 `;
-const Strong = styled.strong`
+
+const BreakDown = styled.div`
     display: flex;
     flex-direction: row;
-    span {
-        font-size: 16px;
-        font-weight: normal;
-    }
 `;

@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import {GlobalContext} from '../components/GlobalContext';
 import { Link as ReachRouterLink } from 'react-router-dom';
 import styled from 'styled-components';
-
+import {Main, CountryName, Heading, Value} from '../globalStyles'
 type ParamsType = {
     alpha3Code: string,
 }
@@ -14,45 +14,56 @@ export default function CountryDetails() {
     const thisCountry = allCountries !== null && allCountries.find(country => country.alpha3Code === alpha3Code);
 
     return (
-        <Frame>
+        <Main>
             <BackLink to="/">Back</BackLink>
             {thisCountry && 
             <Container>
                 <Figure>
                     <FlagImg src={thisCountry.flag}/>
                 </Figure>
-                <div>
-                    <h2>{thisCountry.name}</h2>
+                <Detail>
+                    <CountryName>{thisCountry.name}</CountryName>
                     <BaseNave>
                         <List>
-                            <ListItem><BreakDown>Population: </BreakDown> <Value>{thisCountry.population}</Value></ListItem>
-                            <ListItem><BreakDown>Region: </BreakDown> <Value>{thisCountry.region}</Value></ListItem>
-                            <ListItem><BreakDown>Capital: </BreakDown> <Value>{thisCountry.capital}</Value></ListItem>
+                            <ListItem><Heading>Population: </Heading> <Value>{thisCountry.population}</Value></ListItem>
+                            <ListItem><Heading>Region: </Heading> <Value>{thisCountry.region}</Value></ListItem>
+                            <ListItem><Heading>Capital: </Heading> <Value>{thisCountry.capital}</Value></ListItem>
                         </List>
                         <List>
-                            <ListItem><BreakDown>Top Level Domain: </BreakDown> <Value>{thisCountry.topLevelDomain.map((domain, index) => <i style={{fontStyle: 'normal'}} key={domain + index}>{domain}</i>)}</Value></ListItem>
-                            <ListItem><BreakDown>Currencies: </BreakDown> <Value>{thisCountry.currencies.map(currency => <i style={{fontStyle: 'normal'}} key={currency.symbol}>{currency.name}</i>)}</Value></ListItem>
-                            <ListItem><BreakDown>Languages: </BreakDown> <Value>{thisCountry.languages.map(language => <i style={{fontStyle: 'normal'}} key={language.name}>{language.name}</i>)}</Value></ListItem>
+                            <ListItem><Heading>Top Level Domain: </Heading> <Value>{thisCountry.topLevelDomain.map((domain, index) => <i style={{fontStyle: 'normal'}} key={domain + index}>{domain}</i>)}</Value></ListItem>
+                            <ListItem><Heading>Currencies: </Heading> <Value>{thisCountry.currencies.map(currency => <i style={{fontStyle: 'normal'}} key={currency.symbol}>{currency.name}</i>)}</Value></ListItem>
+                            <ListItem><Heading>Languages: </Heading> <Value>{thisCountry.languages.map(language => <i style={{fontStyle: 'normal'}} key={language.name}>{language.name}</i>)}</Value></ListItem>
                         </List>
                     </BaseNave>
-                    <div>
-                        <BreakDown>Border Countries:</BreakDown> <BorderCountryFrame>{thisCountry.borders.map(border => <BorderCountryLink key={border} to={`/${border}`}>{allCountries?.filter(country => country.alpha3Code === border).map(item => item.name)}</BorderCountryLink>)}</BorderCountryFrame>
-                    </div>
-                </div>
+                    <BorderCountryFrame>
+                        <Heading>Border Countries:</Heading>
+                        <BorderCountryList>
+                            {thisCountry.borders.length > 0 ? thisCountry.borders.map(border => 
+                            <BorderCountryLink key={border} to={`/${border}`}>
+                                {allCountries?.filter(country => country.alpha3Code === border).map(item => item.name)}
+                            </BorderCountryLink>)
+                            :
+                            <Value>No border countries found for this country.</Value>
+                            }
+                        </BorderCountryList>
+                    </BorderCountryFrame>
+                </Detail>
             </Container>
             }
-        </Frame>
+        </Main>
     )
 }
-const Frame = styled.section`
-    max-width: 90%;
+
+const Container = styled.section`
+    display: flex;
+    flex-direction: column;
+    max-width: 560px;
     margin: auto;
-`;
-const Container = styled.div`
-    /* margin-top: 8rem; */
-    @media (min-width: 1080px) {
-        display: flex;
-        justify-content: space-between;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    @media (min-width: 1281px) {
+        flex-direction: row;
+        max-width: unset;
         align-items: center;
         gap: 8rem;
     }
@@ -60,6 +71,7 @@ const Container = styled.div`
         text-align: left;
     }
 `;
+
 const BackLink = styled(ReachRouterLink)`
     text-decoration: none;
     width: 8rem;
@@ -76,25 +88,44 @@ const BackLink = styled(ReachRouterLink)`
     font-weight: 300;
     box-shadow: 0 0 0.7rem 0 rgba(0,0,0,0.29);
 `;
-const BaseNave = styled.nav`
-    display: inline-flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 100%;
-`;
+
 const Figure = styled.figure`
     margin: 0;
-    /* margin-top: 8rem; */
-    text-align: center;
+    width: 100%;
+    max-width: 560px;
+    max-height: 400px;
+`;
+
+const Detail = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 44px;
+    width: 100%;
+    gap: 32px;
+    @media (min-width: 1281px) {
+        margin-top: unset;
+    }
+`;
+
+const BaseNave = styled.nav`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 32px;
+    width: 100%;
+    @media (min-width: 1281px) {
+        gap: unset;
+        flex-direction: row;
+    }
 `;
 const FlagImg = styled.img`
     width: 100%;
-    height: auto;
-    max-width: 560px;
-    max-height: 375px;
-    /* object-fit: cover; */
+    height: 100%;
+    object-fit: cover;
 `;
 const List = styled.ul`
+    margin: 0;
     padding: 0;
 `;
 const ListItem = styled.li`
@@ -107,21 +138,22 @@ const ListItem = styled.li`
     }
 `;
 
-const BreakDown = styled.strong`
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 3.2rem;
-`;
-
-const Value = styled.span`
-    font-weight: 300;
-    line-height: 3.2rem;
-`;
-
 const BorderCountryFrame = styled.div`
+    @media (min-width: 1281px) {
+        display: grid;
+        grid-template-columns: max-content auto;
+        align-items: baseline;
+        gap: 18px;
+    }
+`;
+
+const BorderCountryList = styled.div`
     display: inline-flex;
     flex-wrap: wrap;
+    gap: 10px;
 `;
+
+
 
 const BorderCountryLink = styled(ReachRouterLink)`
     text-decoration: none;
@@ -131,5 +163,4 @@ const BorderCountryLink = styled(ReachRouterLink)`
     padding: .6rem 2.4rem;
     background-color: #ffffff;
     box-shadow: 0 0 0.4rem 0.1rem rgba(17,21,23,0.25);
-    margin: 1rem 0 0 1rem;
 `;

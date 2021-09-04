@@ -29,9 +29,17 @@ function App() {
 export default App;
 
 const Container = styled.div`
+  background-color: hsl(0, 0%, 98%);
   & > header > nav, & > div {
     max-width: 90%;
     min-width: 90%;
     margin: auto;
+
+    @media (min-width: 1281px) {
+      max-width: 1240px;
+      min-width: 1240px;
+    }
+
+    
   }
 `;

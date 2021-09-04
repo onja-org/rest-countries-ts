@@ -13,15 +13,17 @@ const SwitchMode = () => {
 
 export default SwitchMode
 
-const Button = styled.button`
-    font-size: 16px;
+const Button = styled.button` 
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 400;
     letter-spacing: 0;
-    line-height: 1.6rem;
+    line-height: 16px;
     border: none;
     background: none;
     cursor: pointer;
-    @media (min-width: 1080px) {
-        font-size: 20px;
-        line-height: 2.2rem;
+    @media (min-width: 1281px) {
+        font-size: 16px;
+        line-height: 22px;
     }
 `;

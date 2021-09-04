@@ -61,6 +61,7 @@ const Search = styled.div`
     box-shadow: 0 0.2rem 0.9rem 0 rgb(0 0 0 / 5%);
     gap: 24px;
     border-radius: .5rem;
+    background-color: hsl(0, 0%, 100%);
 
     label {
         display: block;
@@ -112,6 +113,7 @@ const DropDown = styled.div`
     border-radius: .5rem;
     box-shadow: 0 0.2rem 0.9rem 0 rgb(0 0 0 / 5%);
     cursor: pointer;
+    background-color: hsl(0, 0%, 100%);
     p {
         margin: 18px 18px 18px 24px;
         cursor: pointer;
