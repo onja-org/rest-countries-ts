@@ -15,7 +15,7 @@ export default function CountryList() {
             && country.region.toLocaleLowerCase().includes(filterCountryRegion.toLocaleLowerCase())).map(country => (
                 <ItemLink to={`/${country.alpha3Code}`} key={country.alpha2Code}>
                     <CountryFlag>
-                        <img src={country.flag}/>
+                        <img src={country.flag} alt='country flag'/>
                     </CountryFlag>
                     <AboutCountry>
                         <CountryName>{country.name}</CountryName>
