@@ -1,8 +1,11 @@
 import { useRef, useContext, useState} from 'react';
 import {GlobalContext} from './GlobalContext';
 import styled, {keyframes} from 'styled-components';
-import SearcIcon from '../images/search-icon.svg';
+import {ReactComponent as SearcIcon} from '../images/search-icon.svg';
+import {ReactComponent as DownArrow} from '../images/down-arrow.svg';
+
 export const FormFilter = () => {
+    
     const {dispatch,searchContryName,filterCountryRegion} = useContext(GlobalContext);
     const [openDropdown, setOpenDropdown] = useState(false);
     const ref = useRef<HTMLInputElement>(null);
@@ -17,11 +20,14 @@ export const FormFilter = () => {
     return (
         <Form>
             <Search>
-                <label htmlFor="searchCountry">Country Name</label> 
-                <input ref={ref} value={searchContryName} onChange={searchCountryByName} id="searchCountry" name="searchCountry" placeholder="Search for a country…"/>
+                <label htmlFor="searchCountry"><SearcIcon/> </label>
+                <input autoComplete="off" ref={ref} value={searchContryName} onChange={searchCountryByName} id="searchCountry" name="searchCountry" placeholder="Search for a country…"/>
             </Search>
             <DropDown onClick={() => setOpenDropdown(!openDropdown)}>
-                <p>{filterCountryRegion ? filterCountryRegion.charAt(0).toUpperCase() + filterCountryRegion.slice(1) : 'Filter by Region'}</p>
+                <p>
+                    <span>{filterCountryRegion ? filterCountryRegion.charAt(0).toUpperCase() + filterCountryRegion.slice(1) : 'Filter by Region'}</span>
+                    <DownArrow/>
+                </p>
                 <RegionsList style={{display: openDropdown ? 'block' : 'none'}} id="filterCountry">
                     {regions.map(region => <li onClick={() => {
                         filterByCountryRegion(region.name)
@@ -50,34 +56,43 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     gap: 40px;
+    @media (min-width: 1280px) {
+        flex-direction: row;
+        justify-content: space-between;
+    }
 `;
 const Search = styled.div`
     display: grid;
     grid-template-columns: 18px auto;
     align-items: center;
-    max-width: 480px;
+    max-width: 416px;
     max-height: 56px;
     padding: 17px 32px;
     box-shadow: 0 0.2rem 0.9rem 0 rgb(0 0 0 / 5%);
     gap: 24px;
     border-radius: .5rem;
-    background-color: hsl(0, 0%, 100%);
-
+    background-color: ${props => props.theme.colors.backgroundColor};
+    @media (min-width: 1280px) {
+        width: 416px;
+    }
     label {
         display: block;
-        content: '';
-        background-image: url(${SearcIcon});
-        background-repeat: no-repeat;
-        background-size: 18px 18px;
         height: 18px;
         width: 18px;
-        text-indent: -999rem;
         cursor: pointer;
+        svg > g {
+            fill: ${props => props.theme.colors.secondary};
+        }
     }
     input {
         width: 100%;
         border: none;
         outline: none;
+        background-color: transparent;
+        color: ${props => props.theme.colors.secondary};
+    }
+    input::placeholder {
+        color: ${props => props.theme.colors.secondary};
     }
 `;
 
@@ -92,7 +107,7 @@ const RegionsList = styled.ul`
     animation: ${growDown} 300ms ease-in-out forwards;
     transform-origin: top center;
     transition: display 300ms;
-    background-color: hsl(0, 0%, 100%);
+    background-color: ${props => props.theme.colors.backgroundColor};
     border-radius: .5rem;
     box-shadow: 0 0.2rem 0.9rem 0 rgb(0 0 0 / 5%);
     z-index: 3;
@@ -102,6 +117,7 @@ const RegionsList = styled.ul`
         margin: 0px 18px 8px 24px;
         text-transform: capitalize;
         cursor: pointer;
+        color: ${props => props.theme.colors.primary};
     }
     li:last-of-type {
         margin-bottom: 0;
@@ -109,13 +125,22 @@ const RegionsList = styled.ul`
 `;
 
 const DropDown = styled.div`
+    width: 200px;
     max-width: 200px;
     border-radius: .5rem;
     box-shadow: 0 0.2rem 0.9rem 0 rgb(0 0 0 / 5%);
     cursor: pointer;
-    background-color: hsl(0, 0%, 100%);
+    background-color: ${props => props.theme.colors.backgroundColor};
     p {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         margin: 18px 18px 18px 24px;
         cursor: pointer;
+        color: ${props => props.theme.colors.primary};
+    }
+    svg {
+        width: 14px;
     }
 `;

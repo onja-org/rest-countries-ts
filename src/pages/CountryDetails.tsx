@@ -3,19 +3,25 @@ import {useParams} from 'react-router-dom';
 import {GlobalContext} from '../components/GlobalContext';
 import { Link as ReachRouterLink } from 'react-router-dom';
 import styled from 'styled-components';
-import {Main, CountryName, Heading, Value} from '../globalStyles'
+import {ReactComponent as BackArrow} from '../images/back-arrow.svg';
+import {Main, CountryName, Heading, Value} from '../globalStyles';
+
 type ParamsType = {
     alpha3Code: string,
 }
 
 export default function CountryDetails() {
+
     const {allCountries} = useContext(GlobalContext);
     const {alpha3Code} = useParams<ParamsType>();
     const thisCountry = allCountries !== null && allCountries.find(country => country.alpha3Code === alpha3Code);
-
+    
     return (
         <Main>
-            <BackLink to="/">Back</BackLink>
+            <BackLink to="/">
+                <BackArrow/>
+                <span>Back</span>
+            </BackLink>
             {thisCountry && 
             <Container>
                 <Figure>
@@ -61,7 +67,7 @@ const Container = styled.section`
     margin: auto;
     padding-top: 80px;
     padding-bottom: 80px;
-    @media (min-width: 1281px) {
+    @media (min-width: 1280px) {
         flex-direction: row;
         max-width: unset;
         align-items: center;
@@ -78,15 +84,20 @@ const BackLink = styled(ReachRouterLink)`
     padding: .8rem 0;
     font-size: 16px;
     border-radius: .6rem;
-    color: #000;
+    color: ${props => props.theme.colors.primary};
     margin-top: 4rem;
     align-items: center;
     display: inline-flex;
     border-radius: .2rem;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: ${props => props.theme.colors.backgroundColor};
     font-weight: 300;
     box-shadow: 0 0 0.7rem 0 rgba(0,0,0,0.29);
+
+    svg {
+        width: 20px;
+        margin-right: 16px;
+    }
 `;
 
 const Figure = styled.figure`
@@ -102,7 +113,7 @@ const Detail = styled.div`
     margin-top: 44px;
     width: 100%;
     gap: 32px;
-    @media (min-width: 1281px) {
+    @media (min-width: 1280px) {
         margin-top: unset;
     }
 `;
@@ -114,7 +125,7 @@ const BaseNave = styled.nav`
     flex-wrap: wrap;
     gap: 32px;
     width: 100%;
-    @media (min-width: 1281px) {
+    @media (min-width: 1280px) {
         gap: unset;
         flex-direction: row;
     }
@@ -139,7 +150,7 @@ const ListItem = styled.li`
 `;
 
 const BorderCountryFrame = styled.div`
-    @media (min-width: 1281px) {
+    @media (min-width: 1280px) {
         display: grid;
         grid-template-columns: max-content auto;
         align-items: baseline;
@@ -159,8 +170,8 @@ const BorderCountryLink = styled(ReachRouterLink)`
     text-decoration: none;
     text-transform: capitalize;
     display: inline-flex;
-    color: initial;
+    color: ${props => props.theme.colors.primary};
     padding: .6rem 2.4rem;
-    background-color: #ffffff;
+    background-color: ${props => props.theme.colors.backgroundColor};
     box-shadow: 0 0 0.4rem 0.1rem rgba(17,21,23,0.25);
 `;

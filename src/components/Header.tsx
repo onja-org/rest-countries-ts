@@ -17,14 +17,17 @@ export default Header;
 const HeaderStyled = styled.header`
     font-family: 'Nunito Sans', sans-serif;
     box-shadow: 0 0.2rem 0.4rem 0 rgba(0,0,0,0.06);
-    background-color: hsl(0, 0%, 100%);
+    background-color: ${props => props.theme.colors.backgroundColor};
+    position: sticky;
+    top: 0px;
+    z-index: 2;
     nav {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         height: 5rem;
-        @media (min-width: 1281px) {
+        @media (min-width: 1280px) {
         height: 98px;
         }
     }
@@ -35,7 +38,8 @@ const HeaderStyled = styled.header`
         font-weight: 800;
         letter-spacing: 0;
         margin: 0;
-        @media (min-width: 1281px) {
+        color: ${props => props.theme.colors.primary};
+        @media (min-width: 1280px) {
             font-size: 24px;
             line-height: 32px;
         }

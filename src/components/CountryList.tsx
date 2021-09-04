@@ -2,8 +2,10 @@ import {useContext} from 'react'
 import { GlobalContext } from './GlobalContext';
 import styled from 'styled-components';
 import { Link as ReachRouterLink } from 'react-router-dom';
-import {CountryName, Heading, Value} from '../globalStyles'
+import {CountryName, Heading, Value} from '../globalStyles';
+
 export default function CountryList() {
+
     const {allCountries, searchContryName,filterCountryRegion} = useContext(GlobalContext);
     
     return (
@@ -51,6 +53,9 @@ const List = styled.ul`
     padding: 0;
     row-gap: 40px;
     justify-content: center;
+    @media(min-width: 1280px) {
+        justify-content: space-between;
+    }
 
 `;
 
@@ -58,8 +63,8 @@ const ItemLink = styled(ReachRouterLink)`
     border-radius: 5px;
     text-decoration: none;
     box-shadow: 0 0 0.7rem 0.2rem rgb(0 0 0 / 3%);
-    background-color: hsl(0, 0%, 100%);
-    color: initial;
+    background-color: ${props => props.theme.colors.backgroundColor};
+    color: ${props => props.theme.colors.primary};
     max-width: 268px;
     @media (max-width: 400px) {
         height: 363px;

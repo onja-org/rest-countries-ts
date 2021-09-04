@@ -1,5 +1,5 @@
 import {createContext, useReducer, useEffect} from 'react';
-
+import {themeTypes, CUSTOM_THEMES} from '../theme/index'
 type countryStateType = {
     alpha2Code: string,
     alpha3Code: string,
@@ -28,41 +28,29 @@ type countryStateType = {
 }
 
 interface State {
-    isDarkMode: boolean;
-    turnOn: () => void;
-    turnOff: () => void;
     dispatch: React.Dispatch<any>;
     allCountries: countryStateType[];
     searchContryName: string;
     filterCountryRegion: string;
+    theme: themeTypes
 }
 export const initialValues: State = {
-    isDarkMode: false,
     allCountries: [],
     searchContryName: '',
     filterCountryRegion: '',
     dispatch: () => {},
-    turnOn: () => {},
-    turnOff: () => {},
+    theme: CUSTOM_THEMES.defaultMode,
 }
-// type Action = | {type: "dark-mode-on"} | {type: "dark-mode-off"} | {type: "get-all-countries", allCountries: []} ;
 type Action = 
-| {type: "dark-mode-on"} 
-| {type: "dark-mode-off"} 
 | {type: "get-all-countries", allCountries: countryStateType[]} 
 | {type: "search-country-name", searchContryName: ''}
-| {type: "filter-country-region", filterCountryRegion: ''} ;
+| {type: "filter-country-region", filterCountryRegion: ''}
+| {type: "switch-theme", theme: themeTypes} ;
     
 export const GlobalContext = createContext(initialValues);
 
 function reducer(state: State, action: Action) {
     switch (action.type) {
-        case 'dark-mode-on': {
-            return {...state, isDarkMode: true}
-        }
-        case 'dark-mode-off': {
-            return {...state, isDarkMode: false}
-        }
         case 'get-all-countries': {
             return {
                 ...state,
@@ -77,6 +65,11 @@ function reducer(state: State, action: Action) {
             return { 
                 ...state,
                 filterCountryRegion: action.filterCountryRegion}
+        }
+        case 'switch-theme': {
+            return { 
+                ...state,
+                theme: action.theme}
         }
         default:
             return state;
@@ -103,13 +96,11 @@ export const GlobalProvider: React.FC = ({children}) => {
 
     return (
         <GlobalContext.Provider value={{
-            turnOn: () => dispatch({type:'dark-mode-on'}),
-            turnOff: () => dispatch({type:'dark-mode-off'}),
-            isDarkMode: state.isDarkMode,
             dispatch,
             searchContryName: state.searchContryName,
             filterCountryRegion: state.filterCountryRegion,
-            allCountries: state.allCountries
+            allCountries: state.allCountries,
+            theme: state.theme
         }}>
             {children}
         </GlobalContext.Provider>
