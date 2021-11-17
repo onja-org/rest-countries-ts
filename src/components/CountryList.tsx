@@ -5,20 +5,19 @@ import { Link as ReachRouterLink } from 'react-router-dom';
 import {CountryName, Heading, Value} from '../globalStyles';
 
 export default function CountryList() {
-
-    const {allCountries, searchContryName,filterCountryRegion} = useContext(GlobalContext);
+    const {allCountries, searchContryName,filterCountryRegion, dispatch} = useContext(GlobalContext);
     
     return (
     <Section>
         <List>
-            {allCountries?.filter(country => country.name.toLocaleLowerCase().includes(searchContryName.toLocaleLowerCase()) 
+            {allCountries?.filter(country => country.name?.common.toLocaleLowerCase().includes(searchContryName.toLocaleLowerCase()) 
             && country.region.toLocaleLowerCase().includes(filterCountryRegion.toLocaleLowerCase())).map(country => (
-                <ItemLink to={`/${country.alpha3Code}`} key={country.alpha2Code}>
+                <ItemLink onClick={() => dispatch({type: "set-country-id", countryId: country.id})} to={`/${country.id}`} key={country.id}>
                     <CountryFlag>
-                        <img src={country.flag} alt='country flag'/>
+                        <img src={country.flags.png} alt='country flag'/>
                     </CountryFlag>
                     <AboutCountry>
-                        <CountryName>{country.name}</CountryName>
+                        <CountryName>{country.name.common}</CountryName>
                         <BreakDown>
                             <Heading>Population:</Heading>
                             <Value>{country.population}</Value>
@@ -65,6 +64,7 @@ const ItemLink = styled(ReachRouterLink)`
     box-shadow: 0 0 0.7rem 0.2rem rgb(0 0 0 / 3%);
     background-color: ${props => props.theme.colors.backgroundColor};
     color: ${props => props.theme.colors.primary};
+    width: 100%;
     max-width: 268px;
     @media (max-width: 400px) {
         height: 363px;

@@ -1,30 +1,47 @@
 import {createContext, useReducer, useEffect} from 'react';
-import {themeTypes, CUSTOM_THEMES} from '../theme/index'
+import {themeTypes, CUSTOM_THEMES} from '../theme/index';
+import restcountriesData from '../all-countries.json';
+import { v4 as uuidv4 } from 'uuid';
+const REST_COUNTRIES_V2_API_ENDPOINT = `https://restcountries.com/v3.1/all`;
+
 type countryStateType = {
-    alpha2Code: string,
-    alpha3Code: string,
     altSpellings:[string],
     area: number,
     borders: [string],
-    callingCodes: [string],
     capital: string,
+    cca2: string,
+    cca3: string,
+    ccn3: string,
     cioc: string,
-    currencies: [{code: string, name: string, symbol: string}],
-    demonym: string,
+    currencies: {ALL: {name: string,symbol: string}},
+    demonyms: {
+        eng: {f: string,m: string},
+        fra: {f: string,m: string},
+    },
     flag: string,
-    gini: number,
-    languages: [{iso639_1: string, iso639_2: string, name: string, nativeName: string}],
+    flags: {png: string, svg: string},
+    idd: {root: string, suffixes: [string]},
+    independent: boolean,
+    landlocked: boolean,
+    languages: {sqi: string,},
     latlng: [number],
-    name: string,
-    nativeName: string,
-    numericCode: string,
+    maps: {googleMaps: string, openStreetMaps: string},
+    name: {
+        common: string, 
+        nativeName: {
+            sqi: {
+                common: string,
+                official: string
+                }
+            }
+    },
     population: number,
     region: string,
-    regionalBlocs: [object],
+    status: string,
     subregion: string,
-    timezones: [string]
-    topLevelDomain: [string]
+    tld: [string],
     translations: object, 
+    id: number,
 }
 
 interface State {
@@ -32,7 +49,8 @@ interface State {
     allCountries: countryStateType[];
     searchContryName: string;
     filterCountryRegion: string;
-    theme: themeTypes
+    theme: themeTypes,
+    countryId: string,
 }
 export const initialValues: State = {
     allCountries: [],
@@ -40,13 +58,16 @@ export const initialValues: State = {
     filterCountryRegion: '',
     dispatch: () => {},
     theme: CUSTOM_THEMES.defaultMode,
+    countryId: '',
 }
 type Action = 
 | {type: "get-all-countries", allCountries: countryStateType[]} 
 | {type: "search-country-name", searchContryName: ''}
 | {type: "filter-country-region", filterCountryRegion: ''}
-| {type: "switch-theme", theme: themeTypes} ;
+| {type: "switch-theme", theme: themeTypes} 
+| {type: "set-country-id", countryId: ''};
     
+
 export const GlobalContext = createContext(initialValues);
 
 function reducer(state: State, action: Action) {
@@ -71,20 +92,28 @@ function reducer(state: State, action: Action) {
                 ...state,
                 theme: action.theme}
         }
+        case 'set-country-id': {
+            return { 
+                ...state,
+                countryId: action.countryId}
+        }
         default:
             return state;
     }
 }
-const url = 'https://restcountries.eu/rest/v2/all';
 
 export const GlobalProvider: React.FC = ({children}) => {
     const [state, dispatch] = useReducer(reducer, initialValues);
     
     async function fetchAllCountries() {
-		const res = await fetch(url);
+		const res = await fetch(REST_COUNTRIES_V2_API_ENDPOINT);
 		try {
 			const data = await res.json();
-			dispatch({type: 'get-all-countries', allCountries: data});
+            const countries = data.length ? data : restcountriesData;
+            const countriesWithIds = countries.map((country: any) => {
+                return {...country, id: uuidv4()}
+            })
+			dispatch({type: 'get-all-countries', allCountries: countriesWithIds});
 		} catch (e) {
 			console.log(e);
 		}
@@ -100,7 +129,8 @@ export const GlobalProvider: React.FC = ({children}) => {
             searchContryName: state.searchContryName,
             filterCountryRegion: state.filterCountryRegion,
             allCountries: state.allCountries,
-            theme: state.theme
+            theme: state.theme,
+            countryId: state.countryId,
         }}>
             {children}
         </GlobalContext.Provider>

@@ -1,21 +1,15 @@
 import {useContext} from 'react';
-import {useParams} from 'react-router-dom';
 import {GlobalContext} from '../components/GlobalContext';
 import { Link as ReachRouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 import {ReactComponent as BackArrow} from '../images/back-arrow.svg';
 import {Main, CountryName, Heading, Value} from '../globalStyles';
 
-type ParamsType = {
-    alpha3Code: string,
-}
-
 export default function CountryDetails() {
-
-    const {allCountries} = useContext(GlobalContext);
-    const {alpha3Code} = useParams<ParamsType>();
-    const thisCountry = allCountries !== null && allCountries.find(country => country.alpha3Code === alpha3Code);
+    const {allCountries, countryId, dispatch} = useContext(GlobalContext);
+    const thisCountry = allCountries !== null && allCountries.find(country => country.id.toString() === countryId);
     
+    const nativeName = thisCountry && (Object.values(thisCountry?.name.nativeName)[1] ? <Value>{Object.values(thisCountry?.name.nativeName)[1].common}</Value> : Object.values(thisCountry?.name.nativeName).map(obj => <Value key={obj.official}>{obj.common}, </Value>))
     return (
         <Main>
             <BackLink to="/">
@@ -25,29 +19,39 @@ export default function CountryDetails() {
             {thisCountry && 
             <Container>
                 <Figure>
-                    <FlagImg src={thisCountry.flag}/>
+                    <FlagImg src={thisCountry?.flags?.png}/>
                 </Figure>
                 <Detail>
-                    <CountryName>{thisCountry.name}</CountryName>
+                    <CountryName>{thisCountry?.name?.common}</CountryName>
                     <BaseNave>
                         <List>
-                            <ListItem><Heading>Population: </Heading> <Value>{thisCountry.population}</Value></ListItem>
-                            <ListItem><Heading>Region: </Heading> <Value>{thisCountry.region}</Value></ListItem>
-                            <ListItem><Heading>Capital: </Heading> <Value>{thisCountry.capital}</Value></ListItem>
+                        <ListItem><Heading>Native Name: </Heading>{nativeName}</ListItem>
+                            <ListItem><Heading>Population: </Heading> <Value>{thisCountry?.population}</Value></ListItem>
+                            <ListItem><Heading>Region: </Heading> <Value>{thisCountry?.region}</Value></ListItem>
+                            <ListItem><Heading>Sub Region: </Heading> <Value>{thisCountry?.subregion}</Value></ListItem>
+                            <ListItem><Heading>Capital: </Heading> <Value>{thisCountry?.capital}</Value></ListItem>
                         </List>
                         <List>
-                            <ListItem><Heading>Top Level Domain: </Heading> <Value>{thisCountry.topLevelDomain.map((domain, index) => <i style={{fontStyle: 'normal'}} key={domain + index}>{domain}</i>)}</Value></ListItem>
-                            <ListItem><Heading>Currencies: </Heading> <Value>{thisCountry.currencies.map(currency => <i style={{fontStyle: 'normal'}} key={currency.symbol}>{currency.name}</i>)}</Value></ListItem>
-                            <ListItem><Heading>Languages: </Heading> <Value>{thisCountry.languages.map(language => <i style={{fontStyle: 'normal'}} key={language.name}>{language.name}</i>)}</Value></ListItem>
+                            <ListItem><Heading>Top Level Domain: </Heading> <Value>{thisCountry?.tld.map((domain, index) => <i style={{fontStyle: 'normal'}} key={domain + index}>{domain}</i>)}</Value></ListItem>
+                            <ListItem><Heading>Currencies: </Heading> <Value>{Object.values(thisCountry?.currencies).map(currency => <i style={{fontStyle: 'normal'}} key={currency.symbol}>{currency.name}</i>)}</Value></ListItem>
+                            <ListItem><Heading>Languages: </Heading> <Value>{Object.values(thisCountry?.languages).map(language => <i style={{fontStyle: 'normal'}} key={language}>{language}, </i>)}</Value></ListItem>
                         </List>
                     </BaseNave>
                     <BorderCountryFrame>
                         <Heading>Border Countries:</Heading>
                         <BorderCountryList>
-                            {thisCountry.borders.length > 0 ? thisCountry.borders.map(border => 
-                            <BorderCountryLink key={border} to={`/${border}`}>
-                                {allCountries?.filter(country => country.alpha3Code === border).map(item => item.name)}
-                            </BorderCountryLink>)
+                            {thisCountry?.borders?.length > 0 ? thisCountry.borders.map(border => {
+                            const thisBorderCountry = allCountries.find(country => country.cca3 === border);
+                            return <BorderCountryLink 
+                                        onClick={() => {
+                                            dispatch({type: "set-country-id", countryId: thisBorderCountry && thisBorderCountry?.id})
+                                        }} 
+                                        key={border} 
+                                        to={`/${thisBorderCountry && thisBorderCountry?.id}`}
+                                    >
+                                    {allCountries?.filter(country => country.cca3 === border).map(item => item.name.common)}
+                                </BorderCountryLink>
+                            })
                             :
                             <Value>No border countries found for this country.</Value>
                             }
