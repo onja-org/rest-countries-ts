@@ -10,7 +10,9 @@
 
 ## Overview
 
-![Design preview for the REST Countries API with color theme switcher coding challenge](./design/desktop-preview.jpg)
+![Screenshot for the REST Countries API with color theme switcher live demo](https://user-images.githubusercontent.com/60210360/149457830-6a74f887-e601-48a0-8d70-1c3200c1b1ab.png)
+![Screenshot for the REST Countries API with color theme switcher live demo](https://user-images.githubusercontent.com/60210360/149457832-0cc9540e-bba6-4d24-8b76-f13c3fefff12.png)
+![Screenshot for the REST Countries API with color theme switcher live demo](https://user-images.githubusercontent.com/60210360/149458102-f59c4874-8983-42dc-a40f-043e247c1f3c.png)
 
 
 ## Build with
