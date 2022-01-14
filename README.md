@@ -1,7 +1,7 @@
 # REST Countries API with color theme switcher
 
 <div>
-    <a href="https://j-emilien-rest-countries.netlify.app/">
+    <a href="https://j-emilien-rest-countries.netlify.app/" target="_blank">
         Live demo
     </a>
 <div>
@@ -29,11 +29,10 @@
 To clone and run this application, you'll need Git and Node.js (which comes with either npm or yarn) installed on your computer. From your command line:
 
 # Clone this repository
-
-$ git clone https://github.com/lightme-fan/rest-countries-ts.git
-
+```bash
 # Install dependencies
 $ npm install or yarn install
 
 # Run the app
 $ parcel index.html or yarn start
+```
