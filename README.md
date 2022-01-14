@@ -1,10 +1,14 @@
 # REST Countries API with color theme switcher
 
 <div>
-    <a href="https://j-emilien-rest-countries.netlify.app/" target="_blank">
-        Live demo
-    </a>
-<div>
+    <h2>
+        <a href="https://j-emilien-rest-countries.netlify.app/" target="_blank">
+            Live demo
+        </a>
+    </h2>
+</div>
+
+## Overview
 
 ![Design preview for the REST Countries API with color theme switcher coding challenge](./design/desktop-preview.jpg)
 
