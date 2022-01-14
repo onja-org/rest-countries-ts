@@ -34,7 +34,7 @@
 
 To clone and run this application, you'll need Git and Node.js (which comes with either npm or yarn) installed on your computer. From your command line:
 
-# Clone this repository
+# Clone the repository
 ```bash
 # Install dependencies
 $ npm install or yarn install
