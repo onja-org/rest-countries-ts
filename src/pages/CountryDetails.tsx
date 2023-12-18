@@ -1,12 +1,14 @@
 import {useContext} from 'react';
 import {GlobalContext} from '../components/GlobalContext';
-import { Link as ReachRouterLink } from 'react-router-dom';
+import { Link as ReachRouterLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {ReactComponent as BackArrow} from '../images/back-arrow.svg';
 import {Main, CountryName, Heading, Value} from '../globalStyles';
 
 export default function CountryDetails() {
-    const {allCountries, countryId, dispatch} = useContext(GlobalContext);
+    const {allCountries} = useContext(GlobalContext);
+    const {countryId}: {countryId: string} = useParams();
+
     const thisCountry = allCountries !== null && allCountries.find(country => country.id.toString() === countryId);
     
     const nativeName = thisCountry && (Object.values(thisCountry?.name.nativeName)[1] ? <Value>{Object.values(thisCountry?.name.nativeName)[1].common}</Value> : Object.values(thisCountry?.name.nativeName).map(obj => <Value key={obj.official}>{obj.common}, </Value>))
@@ -43,9 +45,6 @@ export default function CountryDetails() {
                             {thisCountry?.borders?.length > 0 ? thisCountry.borders.map(border => {
                             const thisBorderCountry = allCountries.find(country => country.cca3 === border);
                             return <BorderCountryLink 
-                                        onClick={() => {
-                                            dispatch({type: "set-country-id", countryId: thisBorderCountry && thisBorderCountry?.id})
-                                        }} 
                                         key={border} 
                                         to={`/${thisBorderCountry && thisBorderCountry?.id}`}
                                     >

@@ -3,11 +3,12 @@ import {GlobalContext} from './GlobalContext';
 import styled from 'styled-components';
 import { CUSTOM_THEMES} from '../theme';
 import {ReactComponent as Moon} from '../images/moon.svg';
+import { SWITCH_THEME } from '../constants';
 
 const SwitchMode = () => {
     const { dispatch, theme} = useContext(GlobalContext);
     const switchTheme = () => {
-        dispatch({type: 'switch-theme', theme: theme.name === 'dark' ? CUSTOM_THEMES.defaultMode : CUSTOM_THEMES.nightMode});
+        dispatch({type: SWITCH_THEME, theme: theme.name === 'dark' ? CUSTOM_THEMES.defaultMode : CUSTOM_THEMES.nightMode});
     }
     return (
         <Button onClick={switchTheme}>

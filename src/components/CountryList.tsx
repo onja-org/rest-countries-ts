@@ -5,14 +5,14 @@ import { Link as ReachRouterLink } from 'react-router-dom';
 import {CountryName, Heading, Value} from '../globalStyles';
 
 export default function CountryList() {
-    const {allCountries, searchContryName,filterCountryRegion, dispatch} = useContext(GlobalContext);
+    const {allCountries, searchCountryName,filterCountryRegion} = useContext(GlobalContext);
     
     return (
     <Section>
         <List>
-            {allCountries?.filter(country => country.name?.common.toLocaleLowerCase().includes(searchContryName.toLocaleLowerCase()) 
+            {allCountries?.filter(country => country.name?.common.toLocaleLowerCase().includes(searchCountryName.toLocaleLowerCase()) 
             && country.region.toLocaleLowerCase().includes(filterCountryRegion.toLocaleLowerCase())).map(country => (
-                <ItemLink onClick={() => dispatch({type: "set-country-id", countryId: country.id})} to={`/${country.id}`} key={country.id}>
+                <ItemLink to={`/${country.id}`} key={country.id}>
                     <CountryFlag>
                         <img src={country.flags.png} alt='country flag'/>
                     </CountryFlag>
@@ -65,10 +65,9 @@ const ItemLink = styled(ReachRouterLink)`
     background-color: ${props => props.theme.colors.backgroundColor};
     color: ${props => props.theme.colors.primary};
     width: 100%;
+    height: 363px;
     max-width: 268px;
-    @media (max-width: 400px) {
-        height: 363px;
-    }
+    transition: all 0.3s ease-out;
     img {
         width: 100%;
         border-radius: 5px 5px 0px 0px;
@@ -76,8 +75,7 @@ const ItemLink = styled(ReachRouterLink)`
         object-fit: cover;
     }
     &:hover {
-        position: relative;
-        bottom: 1px;
+        transform: translateY(5px) translateZ(0);
     }
 `;
 
@@ -89,6 +87,9 @@ const AboutCountry = styled.div`
     margin: 24px;
     & > h2 {
         font-size: 18px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         margin-bottom: 16px;
     }
 `;

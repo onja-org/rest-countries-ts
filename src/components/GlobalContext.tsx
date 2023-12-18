@@ -2,6 +2,7 @@ import {createContext, useReducer, useEffect} from 'react';
 import {themeTypes, CUSTOM_THEMES} from '../theme/index';
 import restcountriesData from '../all-countries.json';
 import { v4 as uuidv4 } from 'uuid';
+import { GET_ALL_COUNTRIES, SEARCH_COUNTRY_NAME, FILTER_COUNTRY_REGION, SWITCH_THEME } from '../constants';
 const REST_COUNTRIES_V2_API_ENDPOINT = `https://restcountries.com/v3.1/all`;
 
 type countryStateType = {
@@ -47,55 +48,47 @@ type countryStateType = {
 interface State {
     dispatch: React.Dispatch<any>;
     allCountries: countryStateType[];
-    searchContryName: string;
+    searchCountryName: string;
     filterCountryRegion: string;
     theme: themeTypes,
-    countryId: string,
 }
 export const initialValues: State = {
     allCountries: [],
-    searchContryName: '',
+    searchCountryName: '',
     filterCountryRegion: '',
     dispatch: () => {},
     theme: CUSTOM_THEMES.defaultMode,
-    countryId: '',
 }
 type Action = 
-| {type: "get-all-countries", allCountries: countryStateType[]} 
-| {type: "search-country-name", searchContryName: ''}
-| {type: "filter-country-region", filterCountryRegion: ''}
-| {type: "switch-theme", theme: themeTypes} 
-| {type: "set-country-id", countryId: ''};
+| {type: typeof GET_ALL_COUNTRIES, allCountries: countryStateType[]} 
+| {type: typeof SEARCH_COUNTRY_NAME, searchCountryName: string}
+| {type: typeof FILTER_COUNTRY_REGION, filterCountryRegion: string}
+| {type: typeof SWITCH_THEME, theme: themeTypes} 
     
 
 export const GlobalContext = createContext(initialValues);
 
 function reducer(state: State, action: Action) {
     switch (action.type) {
-        case 'get-all-countries': {
+        case GET_ALL_COUNTRIES: {
             return {
                 ...state,
                 allCountries: action.allCountries}
         }
-        case 'search-country-name': {
+        case SEARCH_COUNTRY_NAME: {
             return { 
                 ...state,
-                searchContryName: action.searchContryName}
+                searchCountryName: action.searchCountryName}
         }
-        case 'filter-country-region': {
+        case FILTER_COUNTRY_REGION: {
             return { 
                 ...state,
                 filterCountryRegion: action.filterCountryRegion}
         }
-        case 'switch-theme': {
+        case SWITCH_THEME: {
             return { 
                 ...state,
                 theme: action.theme}
-        }
-        case 'set-country-id': {
-            return { 
-                ...state,
-                countryId: action.countryId}
         }
         default:
             return state;
@@ -113,7 +106,7 @@ export const GlobalProvider: React.FC = ({children}) => {
             const countriesWithIds = countries.map((country: any) => {
                 return {...country, id: uuidv4()}
             })
-			dispatch({type: 'get-all-countries', allCountries: countriesWithIds});
+			dispatch({type: GET_ALL_COUNTRIES, allCountries: countriesWithIds});
 		} catch (e) {
 			console.log(e);
 		}
@@ -126,11 +119,10 @@ export const GlobalProvider: React.FC = ({children}) => {
     return (
         <GlobalContext.Provider value={{
             dispatch,
-            searchContryName: state.searchContryName,
+            searchCountryName: state.searchCountryName,
             filterCountryRegion: state.filterCountryRegion,
             allCountries: state.allCountries,
             theme: state.theme,
-            countryId: state.countryId,
         }}>
             {children}
         </GlobalContext.Provider>

@@ -18,7 +18,7 @@ function App() {
             <Route exact path="/">
                 <Home/>
               </Route>
-              <Route path="/:alpha3Code">
+              <Route path="/:countryId">
                 <CountryDetails/>
             </Route>
           </Switch>

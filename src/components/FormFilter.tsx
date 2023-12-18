@@ -1,27 +1,28 @@
 import { useRef, useContext, useState} from 'react';
 import {GlobalContext} from './GlobalContext';
 import styled, {keyframes} from 'styled-components';
-import {ReactComponent as SearcIcon} from '../images/search-icon.svg';
+import {ReactComponent as SearchIcon} from '../images/search-icon.svg';
 import {ReactComponent as DownArrow} from '../images/down-arrow.svg';
+import { FILTER_COUNTRY_REGION, SEARCH_COUNTRY_NAME } from '../constants';
 
 export const FormFilter = () => {
     
-    const {dispatch,searchContryName,filterCountryRegion} = useContext(GlobalContext);
+    const {dispatch,searchCountryName,filterCountryRegion} = useContext(GlobalContext);
     const [openDropdown, setOpenDropdown] = useState(false);
     const ref = useRef<HTMLInputElement>(null);
-    const regions = [{name: 'africa', id: '1'}, {name: 'america', id: '2'}, {name: 'asia', id: '3'}, {name: 'europe', id: '4'}, {name: 'oceania', id: '5'}]
+    const regions = [{name: 'africa', id: '1'}, {name: 'america', id: '2'}, {name: 'asia', id: '3'}, {name: 'europe', id: '4'}, {name: 'oceania', id: '5'}, {name: 'none', id: '6'}]
     function searchCountryByName(e: any) {
-        dispatch({type: "search-country-name", searchContryName: e.target.value})
+        dispatch({type: SEARCH_COUNTRY_NAME, searchCountryName: e.target.value})
     }
     
     function filterByCountryRegion(value: any) {
-        dispatch({type: "filter-country-region", filterCountryRegion: value})
+        dispatch({type: FILTER_COUNTRY_REGION, filterCountryRegion: value})
     }
     return (
         <Form>
             <Search>
-                <label htmlFor="searchCountry"><SearcIcon/> </label>
-                <input autoComplete="off" ref={ref} value={searchContryName} onChange={searchCountryByName} id="searchCountry" name="searchCountry" placeholder="Search for a country…"/>
+                <label htmlFor="searchCountry"><SearchIcon/> </label>
+                <input autoComplete="off" ref={ref} value={searchCountryName} onChange={searchCountryByName} id="searchCountry" name="searchCountry" placeholder="Search for a country…"/>
             </Search>
             <DropDown onClick={() => setOpenDropdown(!openDropdown)}>
                 <p>
@@ -30,7 +31,7 @@ export const FormFilter = () => {
                 </p>
                 <RegionsList style={{display: openDropdown ? 'block' : 'none'}} id="filterCountry">
                     {regions.map(region => <li onClick={() => {
-                        filterByCountryRegion(region.name)
+                        filterByCountryRegion(region.name == 'none' ? '' : region.name)
                         setOpenDropdown(false)
                     }} key={region.id}>{region.name}</li>)}
                 </RegionsList>
@@ -103,6 +104,7 @@ const RegionsList = styled.ul`
     padding: 16px 0px 16px 0px;
     display: none;
     width: -webkit-fill-available;
+    width: inherit;
     max-width: 200px;
     animation: ${growDown} 300ms ease-in-out forwards;
     transform-origin: top center;

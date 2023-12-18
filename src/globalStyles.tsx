@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   background-color: ${props => props.theme.colors.background};
+  height: 100%;
   & > header > nav, & > div {
     max-width: 90%;
     min-width: 90%;
@@ -17,8 +18,8 @@ export const Container = styled.div`
 export const Main = styled.main`
     max-width: 90%;
     min-width: 90%;
+    min-height: 100vh;
     margin: auto;
-
     @media (min-width: 1281px) {
       max-width: 1240px;
       min-width: 1240px;
