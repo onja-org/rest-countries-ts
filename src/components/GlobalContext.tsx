@@ -1,6 +1,6 @@
 import {createContext, useReducer, useEffect} from 'react';
 import {themeTypes, CUSTOM_THEMES} from '../theme/index';
-import restcountriesData from '../all-countries.json';
+import restCountriesData from '../all-countries.json';
 import { v4 as uuidv4 } from 'uuid';
 import { GET_ALL_COUNTRIES, SEARCH_COUNTRY_NAME, FILTER_COUNTRY_REGION, SWITCH_THEME } from '../constants';
 const REST_COUNTRIES_V2_API_ENDPOINT = `https://restcountries.com/v3.1/all`;
@@ -102,7 +102,7 @@ export const GlobalProvider: React.FC = ({children}) => {
 		const res = await fetch(REST_COUNTRIES_V2_API_ENDPOINT);
 		try {
 			const data = await res.json();
-            const countries = data.length ? data : restcountriesData;
+            const countries = data.length ? data : restCountriesData;
             const countriesWithIds = countries.map((country: any) => {
                 return {...country, id: uuidv4()}
             })

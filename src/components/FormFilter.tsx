@@ -31,7 +31,7 @@ export const FormFilter = () => {
                 </p>
                 <RegionsList style={{display: openDropdown ? 'block' : 'none'}} id="filterCountry">
                     {regions.map(region => <li onClick={() => {
-                        filterByCountryRegion(region.name == 'none' ? '' : region.name)
+                        filterByCountryRegion(region.name === 'none' ? '' : region.name)
                         setOpenDropdown(false)
                     }} key={region.id}>{region.name}</li>)}
                 </RegionsList>
